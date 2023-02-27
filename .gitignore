@@ -1,3 +1,4 @@
+.docker/dbdata
 .env
 # compiled output
 /dist
