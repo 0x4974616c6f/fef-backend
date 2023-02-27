@@ -2,7 +2,7 @@ FROM node:lts-alpine
 
 RUN apk add --no-cache bash
 
-RUN npm install -g @nest/cli
+RUN npm i -g @nestjs/cli
 
 USER node
 
