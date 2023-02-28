@@ -1,3 +1,4 @@
+package-lock.json
 .docker/dbdata
 .env
 # compiled output

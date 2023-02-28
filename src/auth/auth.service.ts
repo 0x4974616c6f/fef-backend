@@ -26,7 +26,9 @@ export class AuthService {
     throw new UnauthorizedException();
   }
 
-  async login(loginDto: LoginDto): Promise<any> {
+  async login(loginDto: LoginDto): Promise<{
+    access_token: string;
+  }> {
     const user = await this.validateUser(loginDto.email, loginDto.password);
     const payload = { email: user.email, sub: user.id };
     return {
