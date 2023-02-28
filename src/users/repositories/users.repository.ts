@@ -55,4 +55,12 @@ export class UserRepository {
       },
     });
   }
+
+  async findOneByEmail(email: string): Promise<UserEntity> {
+    return this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+  }
 }

@@ -27,4 +27,8 @@ export class UsersService {
   async remove(id: number): Promise<UserEntity> {
     return this.repository.remove(id);
   }
+
+  async findOneByEmail(email: string): Promise<UserEntity> {
+    return this.repository.findOneByEmail(email);
+  }
 }
