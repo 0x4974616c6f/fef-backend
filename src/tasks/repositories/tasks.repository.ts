@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { NotFoundError } from 'src/common/errors/types/NotFoundError';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTaskDto } from '../dto/create-task.dto';
 import { UpdateTaskDto } from '../dto/update-task.dto';
@@ -9,8 +11,28 @@ export class TaskRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createTaskDto: CreateTaskDto): Promise<TaskEntity> {
+    const { userId } = createTaskDto;
+
+    delete createTaskDto.userId;
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+
+    const data: Prisma.TaskCreateInput = {
+      ...createTaskDto,
+      author: {
+        connect: {
+          id: user.id,
+        },
+      },
+    };
     return this.prisma.task.create({
-      data: createTaskDto,
+      data,
     });
   }
 
@@ -27,11 +49,41 @@ export class TaskRepository {
   }
 
   async update(id: number, updateTaskDto: UpdateTaskDto): Promise<TaskEntity> {
+    const { userId } = updateTaskDto;
+
+    if (!userId) {
+      return this.prisma.task.update({
+        where: {
+          id,
+        },
+        data: updateTaskDto,
+      });
+    }
+
+    delete updateTaskDto.userId;
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+
+    const data: Prisma.TaskUpdateInput = {
+      ...updateTaskDto,
+      author: {
+        connect: {
+          id: user.id,
+        },
+      },
+    };
+
     return this.prisma.task.update({
       where: {
         id,
       },
-      data: updateTaskDto,
+      data,
     });
   }
 
