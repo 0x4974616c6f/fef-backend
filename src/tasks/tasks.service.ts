@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { Done } from './entities/task.entity';
 import { TaskRepository } from './repositories/tasks.repository';
 
 @Injectable()
@@ -25,5 +26,9 @@ export class TasksService {
 
   remove(id: number) {
     return this.repository.remove(id);
+  }
+
+  done(id: number, done: Done) {
+    return this.repository.done(id, done);
   }
 }

@@ -4,7 +4,7 @@ import { NotFoundError } from '../../common/errors/types';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateTaskDto } from '../dto/create-task.dto';
 import { UpdateTaskDto } from '../dto/update-task.dto';
-import { TaskEntity } from '../entities/task.entity';
+import { Done, TaskEntity } from '../entities/task.entity';
 
 @Injectable()
 export class TaskRepository {
@@ -92,6 +92,15 @@ export class TaskRepository {
       where: {
         id,
       },
+    });
+  }
+
+  async done(id: number, done: Done): Promise<TaskEntity> {
+    return this.prisma.task.update({
+      where: {
+        id,
+      },
+      data: done,
     });
   }
 }

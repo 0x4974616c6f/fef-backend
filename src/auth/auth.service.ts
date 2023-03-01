@@ -26,13 +26,13 @@ export class AuthService {
     throw new UnauthorizedException();
   }
 
-  async login(loginDto: LoginDto): Promise<{
-    access_token: string;
-  }> {
+  async login(loginDto: LoginDto) {
     const user = await this.validateUser(loginDto.email, loginDto.password);
     const payload = { email: user.email, sub: user.id };
     return {
-      access_token: this.jwtService.sign(payload),
+      id: user.id,
+      name: user.name,
+      token: this.jwtService.sign(payload),
     };
   }
 

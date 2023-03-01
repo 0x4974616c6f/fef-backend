@@ -6,7 +6,9 @@ import {
   Param,
   Patch,
   Post,
+  Req,
 } from '@nestjs/common';
+import { AuthRequest } from 'src/@types/auth.request.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
@@ -38,5 +40,11 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
+  }
+
+  @Get('/me')
+  me(@Req() req: AuthRequest) {
+    console.log(req.user_id);
+    return this.usersService.findOne(req.user_id);
   }
 }
